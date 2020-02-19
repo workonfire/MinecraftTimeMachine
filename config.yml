@@ -1,0 +1,30 @@
+# Plik konfiguracyjny
+# Minecraft Time Machine
+# Autor: Buty935
+
+selected_time: none
+logs_path: default
+show_timestamps: true
+playback_speed: 1
+filter: default
+
+# Konfiguracja wyglądu
+replace:
+  'Buty935': "&c&lB&6&lu&e&lt&a&ly&b&l9&3&l3&9&l5&f"
+  '[GC2]': "&f[&9GC&b2&f]&f"
+  '!Gracz!': "&a!&2Gracz&a!&f"
+  '!VIP!': "&e!&6VIP&e!&f"
+  '!sVIP!': "&e!&2s&6VIP&e!&f"
+  '!Straznik!': "&b!&9Straznik&b!&f"
+  '[HelpOp]': "&4[HelpOp]&f"
+  '[SS]': "&6[SS]&f"
+  '[Mankai.pl]': "&f[&cMankai.pl&f]&f"
+  'jjay31': "&fjjay&93&f1&f"
+  'Hey!': "&cHey!&f"
+  'Nie masz żadnych nowych wiadomości.': "&6Nie masz żadnych nowych wiadomości.&f"
+  'jest teraz AFK.': "&5jest teraz AFK.&f"
+  'nie jest już AFK.': "&5nie jest już AFK.&f"
+  '??????????': ""
+  '[AreaShop]': "&2[AreaShop]&f"
+  '?Sensei?': "*&4Sensei&f*"
+  '?Pomocnik?': "*&bPomocnik&f*"

@@ -1,0 +1,4 @@
+1.0.1 ALPHA:
+- Dodano funkcję przenoszenia się w czasie do dokładnej godziny
+- Dodano funkcję ustawienia prędkości odtwarzania czatu
+- Dodano funkcję zapamiętania daty
