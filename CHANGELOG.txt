@@ -2,3 +2,4 @@
 - Dodano funkcję przenoszenia się w czasie do dokładnej godziny
 - Dodano funkcję ustawienia prędkości odtwarzania czatu
 - Dodano funkcję zapamiętania daty
+- Dodano możliwość pokazywania odstępów pomiędzy linijkami czatu w celu zwiększenia czytelności

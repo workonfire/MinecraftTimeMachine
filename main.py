@@ -13,7 +13,7 @@ __VERSION__ = '1.0.1 ALPHA'
 # Wczytanie wymaganych bibliotek
 from colors import color_print, colored_message
 from time import sleep, mktime
-import gzip, shutil, os, atexit, yaml, datetime, ciso8601
+import gzip, shutil, os, atexit, yaml, datetime, ciso8601, colorama
 
 # Usunięcie plików logów przy wyjściu z programu
 def exit_handler():
@@ -25,18 +25,17 @@ def exit_handler():
 atexit.register(exit_handler)
 
 # Zdefiniowanie funckji do wyświetlania kolorowych wiadomości
-def print_with_timestamp(colored_timestamp, colored_message):
-    import colorama
-    print(colorama.Style.BRIGHT + colorama.Fore.CYAN + colored_timestamp + " " + colorama.Fore.WHITE + colored_message)
+def print_with_timestamp(timestamp, message):
+    print(colorama.Style.BRIGHT + colorama.Fore.CYAN + timestamp + " " + colorama.Fore.WHITE + message + colorama.Style.RESET_ALL)
 
 # Zdefiniowanie funkcji odpowiadającej za korekcję czasu
 def take_closest(shot, target):
-    return int(min(target, key=lambda x: abs(x - int(mktime(ciso8601.parse_datetime(shot).timetuple())))))
+    return int(min(target, key = lambda x: abs(x - int(mktime(ciso8601.parse_datetime(shot).timetuple())))))
 
 # Wczytanie pliku konfiguracyjnego
 try:
     with open('config.yml') as config_file:
-        config = yaml.load(config_file, Loader=yaml.FullLoader)
+        config = yaml.load(config_file, Loader = yaml.FullLoader)
 except FileNotFoundError:
     # Ustalenie domyślnych wartości pliku konfiguracyjnego
     with open('config.yml', 'w') as config_file:
@@ -44,18 +43,21 @@ except FileNotFoundError:
             'show_timestamps': True,
             'selected_time': 'none',
             'logs_path': 'default',
+            'playback_speed': 1,
+            'filter': 'default',
+            'spacing': False
         }, config_file)
     with open('config.yml') as config_file:
-        config = yaml.load(config_file, Loader=yaml.FullLoader)
+        config = yaml.load(config_file, Loader = yaml.FullLoader)
 
 # Powitanie
 color_print('cyan', "Minecraft Time Machine")
-color_print('blue', "Wersja " + __VERSION__)
+color_print('green', "Wersja " + __VERSION__)
 color_print('yellow', "Tryb tekstowy\n")
 
 # Ostrzeżenie o prędkości odtwarzania czatu
-if config['playback_speed'] > 5:
-    color_print('red', "UWAGA! Prędkość odtwarzania czatu o wartości większej niż 5x może skutkować brakiem czytelności czatu, a wysokie wartości mogą skutkować crashem programu.")
+if config['playback_speed'] > 10:
+    color_print('red', "UWAGA! Prędkość odtwarzania czatu o wartości większej niż 10x może skutkować brakiem czytelności czatu, a wysokie wartości mogą skutkować crashem programu.")
 elif config['playback_speed'] <= 0:
     config['playback_speed'] = 1
 
@@ -130,7 +132,7 @@ try:
     messages = messages[times.index(take_closest(target_time_unparsed, times)) + 1:]
     times = times[times.index(take_closest(target_time_unparsed, times)) + 1:]
     if target_time_parsed['time']:
-        color_print('green', "Nie znaleziono żadnych wiadomości z podanej przez ciebie godziny, więc przeniesiono cię do najbliższej")
+        color_print('green', "Przeniesiono cię do najbliższej godziny")
 except KeyError:
     pass
 except ValueError:
@@ -149,6 +151,8 @@ del new_val, messages
 # Wyświetlenie wiadomości
 iterator = 0
 for message in edited_messages:
+    if config['spacing']:
+        message += "\n"
     if config['show_timestamps']:
         print_with_timestamp("[" + datetime.datetime.fromtimestamp(int(times[iterator])).strftime('%Y-%m-%d %H:%M:%S') + "]", colored_message(message))
     else:
