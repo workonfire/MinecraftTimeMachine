@@ -41,6 +41,7 @@ If so, this app is for you! It simply reads the Minecraft chat logs files in rea
     playback_speed: 1
     filter: default
     spacing: false
+    locale: en
     
     replace:
       'Buty935': "&c&lB&6&lu&e&lt&a&ly&b&l9&3&l3&9&l5&f"

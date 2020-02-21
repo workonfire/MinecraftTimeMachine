@@ -1,6 +1,4 @@
-# Plik konfiguracyjny
-# Minecraft Time Machine
-# Autor: Buty935
+# Configuration file
 
 selected_time: none
 logs_path: default
@@ -8,9 +6,8 @@ show_timestamps: true
 playback_speed: 1
 filter: default
 spacing: false
-locale: pl
+locale: pls
 
-# Konfiguracja wyglądu
 replace:
   'Buty935': "&c&lB&6&lu&e&lt&a&ly&b&l9&3&l3&9&l5&f"
   '[GC2]': "&f[&9GC&b2&f]&f"
@@ -30,3 +27,4 @@ replace:
   '[AreaShop]': "&2[AreaShop]&f"
   '?Sensei?': "*&4Sensei&f*"
   '?Pomocnik?': "*&bPomocnik&f*"
+  '!Tutor!': "&a!&2Tutor&a!&f"

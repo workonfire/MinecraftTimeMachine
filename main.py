@@ -5,6 +5,7 @@ Author: Buty935 aka workonfire
 """
 
 __VERSION__ = 'UNDER DEVELOPMENT'
+__AUTHOR__ = 'Buty935'
 
 # TODO: Custom timestamp formats
 # TODO: Random target time support
@@ -13,7 +14,7 @@ __VERSION__ = 'UNDER DEVELOPMENT'
 # Importing required libraries
 from colors import color_print, colored_message
 from time import sleep, mktime
-import gzip, shutil, os, atexit, yaml, datetime, ciso8601, colorama
+import gzip, shutil, os, atexit, yaml, datetime, ciso8601, colorama, sys
 
 # Removing old log files on program exit
 def exit_handler():
@@ -57,10 +58,15 @@ try:
         language = yaml.load(language_file, Loader = yaml.FullLoader)
 except FileNotFoundError:
     color_print('red', "Error: locale file 'messages\\"+config['locale']+".yml' does not exist. Please check your configuration.")
+    try:
+        if sys.argv[1] == '-s':
+            os.system('pause')
+    except IndexError:
+        pass
     raise SystemExit
 
 # Welcome
-color_print('cyan', "Minecraft Time Machine by Buty935")
+color_print('cyan', "Minecraft Time Machine by " + __AUTHOR__)
 color_print('green', language['version'] + __VERSION__)
 color_print('yellow', language['text_mode'] + "\n")
 
@@ -146,6 +152,11 @@ except KeyError:
     pass
 except ValueError:
     color_print('red', language['filter_error'])
+    try:
+        if sys.argv[1] == '-s':
+            os.system('pause')
+    except IndexError:
+        pass
     raise SystemExit
 
 # Replacing the original values from the message with those from the configuration file
