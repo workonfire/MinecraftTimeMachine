@@ -16,11 +16,15 @@ from colors import color_text, colored_message
 from time import sleep, mktime
 import gzip, shutil, os, atexit, yaml, datetime, ciso8601, sys
 
-# Removing old log files on program exit
+# Removing old log files and safe closing program exit
 def exit_handler():
     try:
         shutil.rmtree('temp')
+        if sys.argv[1] == '-s':
+            os.system('pause')
     except FileNotFoundError:
+        pass
+    except IndexError:
         pass
 
 atexit.register(exit_handler)
@@ -32,14 +36,6 @@ def print_with_timestamp(timestamp, message_input):
 # Defining function for time correction
 def take_closest(shot, target):
     return int(min(target, key = lambda x: abs(x - int(mktime(ciso8601.parse_datetime(shot).timetuple())))))
-
-# Defining function for safe program closing
-def pause():
-    try:
-        if sys.argv[1] == '-s':
-            os.system('pause')
-    except IndexError:
-        pass
 
 # Reading the configuration file
 try:
@@ -72,7 +68,6 @@ except FileNotFoundError:
             language = yaml.load(language_file, Loader = yaml.FullLoader)
     except FileNotFoundError:
         print(color_text('red', 'none', "DEFAULT LOCALE FILE (en.yml) NOT FOUND."))
-        pause()
         raise SystemExit
 
 # Welcome
@@ -101,22 +96,23 @@ while True:
             target_time_unparsed = input(language['target_time_input'])
         except KeyboardInterrupt:
             print(color_text('red', 'none', language['program_exit']))
-            pause()
             raise SystemExit
 
     # Processing the date and time
     try:
         target_time_parsed = {'date': target_time_unparsed.split(' ')[0],
                               'time': target_time_unparsed.split(' ')[1]}
+    except IndexError:
+        target_time_parsed = {'date': target_time_unparsed}
+    try:
         if not os.path.exists(config['logs_path'] + target_time_parsed['date'] + '-1.log.gz'):
             raise FileNotFoundError
         if len(target_time_parsed['time'].split(':')) == 2:
             target_time_parsed['time'] += ':00'
         break
-    except IndexError:
-        target_time_parsed = {'date': target_time_unparsed}
+    except KeyError:
         break
-    except FileNotFoundError:  # zadziała tylko na podanie daty i godziny, bo dżejuś tak powiedział #TODO: naprawić to
+    except FileNotFoundError:
         print(color_text('red', 'none', language['time_not_found1'] + target_time_parsed['date'] + language['time_not_found2']))
 
 # Determining the number of log files
@@ -155,7 +151,10 @@ messages = []
 for line in full_logs:
     times.append(int(mktime(ciso8601.parse_datetime(target_time_parsed['date'] + ' ' + line.split(' ')[0].strip('[]')).timetuple())))
     # Inserting the messages into the list
-    messages.append(' '.join(line.split(' ')[3:]))
+    if "[Client thread/INFO]" in line:
+        messages.append(' '.join(line.split(' ')[4:]))
+    else:
+        messages.append(' '.join(line.split(' ')[3:]))
 
 # Importing messages only from the given hour, if provided
 try:
@@ -167,7 +166,6 @@ except KeyError:
     pass
 except ValueError:
     print(color_text('red', 'none', language['filter_error']))
-    pause()
     raise SystemExit
 
 # Replacing the original values from the message with those from the configuration file
@@ -181,7 +179,6 @@ try:
     del new_val, messages
 except NameError:
     print(color_text('red', 'none', language['time_range_exceeded']))
-    pause()
     raise SystemExit
 
 # Displaying the messages
@@ -200,9 +197,5 @@ for message in edited_messages:
             pass
     except KeyboardInterrupt:
         print(color_text('red', 'none', language['program_exit']))
-        pause()
         raise SystemExit
     iterator += 1
-
-# Closing the program
-pause()

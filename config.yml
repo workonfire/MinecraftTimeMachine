@@ -37,3 +37,4 @@ replace:
   '[KSI¥¯Ê]': "&8[KSI&b¥&8¯Ê]&f"
   '[TYPOWY]': "&6[&eTYPOWY&6]&f"
   '[RAK]': "&c[RAK]&f"
+  'Teleportuje do end.': "Teleportuje do &cend&f."
