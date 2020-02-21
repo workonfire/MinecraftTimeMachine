@@ -22,7 +22,8 @@ If so, this app is for you! It simply reads the Minecraft chat logs files in rea
 - *TODO: Screenshots and GUI support*
 
 ### Language support
-This app currently supports only Polish.
+- English
+- Polish
 
 ### Dependencies
 - [Python 3](https://www.python.org/downloads/ "Python 3")
