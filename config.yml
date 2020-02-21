@@ -6,7 +6,7 @@ show_timestamps: true
 playback_speed: 1
 filter: default
 spacing: false
-locale: pls
+locale: pl
 
 replace:
   'Buty935': "&c&lB&6&lu&e&lt&a&ly&b&l9&3&l3&9&l5&f"
@@ -17,14 +17,23 @@ replace:
   '!Straznik!': "&b!&9Straznik&b!&f"
   '[HelpOp]': "&4[HelpOp]&f"
   '[SS]': "&6[SS]&f"
-  '[Mankai.pl]': "&f[&cMankai.pl&f]&f"
+  'Mankai.pl': "&cMankai.pl&f"
   'jjay31': "&fjjay&93&f1&f"
   'Hey!': "&cHey!&f"
-  'Nie masz Å¼adnych nowych wiadomoÅ›ci.': "&6Nie masz Å¼adnych nowych wiadomoÅ›ci.&f"
+  'Nie masz ¿adnych nowych wiadomoœci.': "&6Nie masz ¿adnych nowych wiadomoœci.&f"
   'jest teraz AFK.': "&5jest teraz AFK.&f"
-  'nie jest juÅ¼ AFK.': "&5nie jest juÅ¼ AFK.&f"
+  'nie jest ju¿ AFK.': "&5nie jest ju¿ AFK.&f"
   '??????????': ""
+  '????????': ""
   '[AreaShop]': "&2[AreaShop]&f"
   '?Sensei?': "*&4Sensei&f*"
   '?Pomocnik?': "*&bPomocnik&f*"
   '!Tutor!': "&a!&2Tutor&a!&f"
+  'zbanowa³': "&czbanowa³&f"
+  'wyrzuci³ gracza': "&cwyrzuci³ gracza&f"
+  '-> Ja]': "&6-> &cJa&6]&f"
+  '[NO-LIFE]': "&8[NO-&aLIFE&8]&f"
+  '[KLOCUSZEK]': "&8[KLOCUSZEK]&f"
+  '[KSI¥¯Ê]': "&8[KSI&b¥&8¯Ê]&f"
+  '[TYPOWY]': "&6[&eTYPOWY&6]&f"
+  '[RAK]': "&c[RAK]&f"

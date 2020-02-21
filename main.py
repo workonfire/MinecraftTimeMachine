@@ -12,9 +12,9 @@ __AUTHOR__ = 'Buty935'
 # TODO: Comments in default config.yml
 
 # Importing required libraries
-from colors import color_print, colored_message
+from colors import color_text, colored_message
 from time import sleep, mktime
-import gzip, shutil, os, atexit, yaml, datetime, ciso8601, colorama, sys
+import gzip, shutil, os, atexit, yaml, datetime, ciso8601, sys
 
 # Removing old log files on program exit
 def exit_handler():
@@ -26,12 +26,20 @@ def exit_handler():
 atexit.register(exit_handler)
 
 # Defining function for printing colored timestamps
-def print_with_timestamp(timestamp, message):
-    print(colorama.Style.BRIGHT + colorama.Fore.CYAN + timestamp + " " + colorama.Fore.WHITE + message + colorama.Style.RESET_ALL)
+def print_with_timestamp(timestamp, message_input):
+    print("\033[0;96m" + timestamp + " " + "\033[0;37m" + message_input + "\033[00m")
 
 # Defining function for time correction
 def take_closest(shot, target):
     return int(min(target, key = lambda x: abs(x - int(mktime(ciso8601.parse_datetime(shot).timetuple())))))
+
+# Defining function for safe program closing
+def pause():
+    try:
+        if sys.argv[1] == '-s':
+            os.system('pause')
+    except IndexError:
+        pass
 
 # Reading the configuration file
 try:
@@ -57,22 +65,24 @@ try:
     with open('messages\\' + config['locale'] + '.yml') as language_file:
         language = yaml.load(language_file, Loader = yaml.FullLoader)
 except FileNotFoundError:
-    color_print('red', "Error: locale file 'messages\\"+config['locale']+".yml' does not exist. Please check your configuration.")
+    print(color_text('red', 'none', "Error: locale file 'messages\\"+config['locale']+".yml' does not exist. Please check your configuration."))
+    print("Setting default language...")
     try:
-        if sys.argv[1] == '-s':
-            os.system('pause')
-    except IndexError:
-        pass
-    raise SystemExit
+        with open('messages\\en.yml') as language_file:
+            language = yaml.load(language_file, Loader = yaml.FullLoader)
+    except FileNotFoundError:
+        print(color_text('red', 'none', "DEFAULT LOCALE FILE (en.yml) NOT FOUND."))
+        pause()
+        raise SystemExit
 
 # Welcome
-color_print('cyan', "Minecraft Time Machine by " + __AUTHOR__)
-color_print('green', language['version'] + __VERSION__)
-color_print('yellow', language['text_mode'] + "\n")
+print(color_text('purple', 'back', "Minecraft Time Machine by " + __AUTHOR__))
+print(color_text('green', 'bright', language['version'] + __VERSION__))
+print(color_text('yellow', 'bright', language['text_mode'] + "\n"))
 
 # Playback speed warning
 if config['playback_speed'] > 10:
-    color_print('red', language['playback_speed_warning'])
+    print(color_text('red', 'none', language['playback_speed_warning']))
 elif config['playback_speed'] <= 0:
     config['playback_speed'] = 1
 
@@ -81,13 +91,18 @@ if config['logs_path'] == 'default':
     config['logs_path'] = os.getenv("APPDATA") + '\.minecraft\logs\\'
 
 # Setting the date
-color_print('magenta', language['supported_formats'])
+print(color_text('purple', 'bright', language['supported_formats']))
 while True:
     if config['selected_time'] != 'none':
         target_time_unparsed = str(config['selected_time'])
-        color_print('green', language['target_time_set'] + target_time_unparsed)
+        print(color_text('green', 'none', language['target_time_set'] + target_time_unparsed))
     else:
-        target_time_unparsed = input(language['target_time_input'])
+        try:
+            target_time_unparsed = input(language['target_time_input'])
+        except KeyboardInterrupt:
+            print(color_text('red', 'none', language['program_exit']))
+            pause()
+            raise SystemExit
 
     # Processing the date and time
     try:
@@ -102,7 +117,7 @@ while True:
         target_time_parsed = {'date': target_time_unparsed}
         break
     except FileNotFoundError:  # zadziała tylko na podanie daty i godziny, bo dżejuś tak powiedział #TODO: naprawić to
-        color_print('red', language['time_not_found1'] + target_time_parsed['date'] + language['time_not_found2'])
+        print(color_text('red', 'none', language['time_not_found1'] + target_time_parsed['date'] + language['time_not_found2']))
 
 # Determining the number of log files
 logs_files = []
@@ -134,7 +149,7 @@ with open('temp\\used.log') as used_log_file:
         if config['filter'] in line:
             full_logs.append(line.rstrip())
 
-# Loading the timestamps from logs into the list and converting them to UNIX time
+# Loading the timestamps from logs into the list and converting them to UNIX timestamp
 times = []
 messages = []
 for line in full_logs:
@@ -142,21 +157,17 @@ for line in full_logs:
     # Inserting the messages into the list
     messages.append(' '.join(line.split(' ')[3:]))
 
-# Importing messages only from the given time, if provided
+# Importing messages only from the given hour, if provided
 try:
     messages = messages[times.index(take_closest(target_time_unparsed, times)) + 1:]
     times = times[times.index(take_closest(target_time_unparsed, times)) + 1:]
     if target_time_parsed['time']:
-        color_print('green', language['moved_to_the_closest_time'])
+        print(color_text('green', 'none', language['moved_to_the_closest_time']))
 except KeyError:
     pass
 except ValueError:
-    color_print('red', language['filter_error'])
-    try:
-        if sys.argv[1] == '-s':
-            os.system('pause')
-    except IndexError:
-        pass
+    print(color_text('red', 'none', language['filter_error']))
+    pause()
     raise SystemExit
 
 # Replacing the original values from the message with those from the configuration file
@@ -166,19 +177,32 @@ for message in messages:
     for key, val in config['replace'].items():
         new_val = new_val.replace(key, val)
     edited_messages.append(new_val)
-del new_val, messages
+try:
+    del new_val, messages
+except NameError:
+    print(color_text('red', 'none', language['time_range_exceeded']))
+    pause()
+    raise SystemExit
 
 # Displaying the messages
 iterator = 0
 for message in edited_messages:
     if config['spacing']:
         message += "\n"
-    if config['show_timestamps']:
-        print_with_timestamp("[" + datetime.datetime.fromtimestamp(int(times[iterator])).strftime('%Y-%m-%d %H:%M:%S') + "]", colored_message(message))
-    else:
-        print(colored_message(message))
     try:
-        sleep(int(times[iterator + 1] - times[iterator]) / config['playback_speed'])
-    except IndexError:
-        pass
+        if config['show_timestamps']:
+            print_with_timestamp("[" + datetime.datetime.fromtimestamp(int(times[iterator])).strftime('%Y-%m-%d %H:%M:%S') + "]", colored_message(message))
+        else:
+            print(colored_message(message))
+        try:
+            sleep(int(times[iterator + 1] - times[iterator]) / config['playback_speed'])
+        except IndexError:
+            pass
+    except KeyboardInterrupt:
+        print(color_text('red', 'none', language['program_exit']))
+        pause()
+        raise SystemExit
     iterator += 1
+
+# Closing the program
+pause()

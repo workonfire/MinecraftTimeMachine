@@ -21,18 +21,17 @@ If so, this app is for you! It simply reads the Minecraft chat logs files in rea
 - *TODO: Going back to random time*
 - *TODO: Screenshots and GUI support*
 
-### Language support
+### Supported languages
 - English
 - Polish
 
 ### Dependencies
 - [Python 3](https://www.python.org/downloads/ "Python 3")
-- [colorama](https://pypi.org/project/colorama/ "colorama")
 - [PyYAML](https://pyyaml.org/wiki/PyYAMLDocumentation "PyYAML")
 - [ciso8601](https://pypi.org/project/ciso8601/ "ciso8601")
 
 ### Screenshots
-[![Screenshot](https://cdn.discordapp.com/attachments/618527570807357450/680090185358376965/unknown.png "Screenshot")](https://cdn.discordapp.com/attachments/618527570807357450/680090185358376965/unknown.png "Screenshot")
+[![Screenshot](https://i.imgur.com/tmTHKFZ.png "Screenshot")](https://i.imgur.com/tmTHKFZ.png "Screenshot")
 
 ### Example configuration file
     selected_time: none
@@ -45,3 +44,5 @@ If so, this app is for you! It simply reads the Minecraft chat logs files in rea
     
     replace:
       'Buty935': "&c&lB&6&lu&e&lt&a&ly&b&l9&3&l3&9&l5&f"
+      'admin': '&4admin&f'
+      '*VIP*': '&6*&eVIP&6*&f'

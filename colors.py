@@ -1,48 +1,40 @@
-import colorama
-
-def color_print(color, text):
-    colorama.init(autoreset=True)
-    if color == 'red':
-        color_to_print = colorama.Fore.RED
-    elif color == 'green':
-        color_to_print = colorama.Fore.GREEN
-    elif color == 'yellow':
-        color_to_print = colorama.Fore.YELLOW
-    elif color == 'blue':
-        color_to_print = colorama.Fore.BLUE
-    elif color == 'magenta':
-        color_to_print = colorama.Fore.MAGENTA
-    elif color == 'cyan':
-        color_to_print = colorama.Fore.CYAN
+def color_text(color, format, text):
+    colors = {'black': 0, 'red': 1, 'green': 2, 'yellow': 3, 'blue': 4, 'purple': 5, 'cyan': 6, 'white': 7}
+    if format == 'back':
+        format = "\033[4"
+    elif format == 'underline':
+        format =  "\033[4;3"
+    elif format == 'bright':
+        format =  "\033[0;9"
     else:
-        color_to_print = colorama.Fore.WHITE
-    print(colorama.Style.BRIGHT + color_to_print + text)
-    colorama.deinit()
+        format = "\033[0;3"
+    return format + str(colors[color]) + 'm' + text + "\033[00m"
 
-def colored_message(format):
-    # Przykład: &c&lB&6&lu&e&lt&a&ly&b&l9&3&l3&9&l5
-    colorama.init(autoreset=True)
-    format = format.replace('&4', colorama.Style.DIM + colorama.Fore.RED)
-    format = format.replace('&c', colorama.Style.BRIGHT + colorama.Fore.RED)
-    format = format.replace('&6', colorama.Style.DIM + colorama.Fore.YELLOW)
-    format = format.replace('&e', colorama.Style.BRIGHT + colorama.Fore.YELLOW)
-    format = format.replace('&2', colorama.Style.DIM + colorama.Fore.GREEN)
-    format = format.replace('&a', colorama.Style.BRIGHT + colorama.Fore.GREEN)
-    format = format.replace('&b', colorama.Style.BRIGHT + colorama.Fore.CYAN)
-    format = format.replace('&3', colorama.Style.DIM + colorama.Fore.CYAN)
-    format = format.replace('&1', colorama.Style.BRIGHT + colorama.Fore.BLUE)
-    format = format.replace('&9', colorama.Style.DIM + colorama.Fore.BLUE)
-    format = format.replace('&d', colorama.Style.BRIGHT + colorama.Fore.MAGENTA)
-    format = format.replace('&5', colorama.Style.DIM + colorama.Fore.MAGENTA)
-    format = format.replace('&f', colorama.Style.BRIGHT + colorama.Fore.WHITE)
-    format = format.replace('&7', colorama.Style.DIM + colorama.Fore.WHITE)
-    format = format.replace('&8', colorama.Style.DIM + colorama.Fore.WHITE)
-    format = format.replace('&0', colorama.Style.DIM + colorama.Fore.WHITE)
-    format = format.replace('&l', '')
-    format = format.replace('&o', '')
-    format = format.replace('&m', '')
-    format = format.replace('&n', '')
-    format = format.replace('&r', colorama.Style.DIM + colorama.Fore.WHITE)
-    format = format.replace('&k', '')
-    colorama.deinit()
-    return format + colorama.Style.RESET_ALL
+def colored_message(message):
+    color_codes = {
+        '&0': "\033[0;30m",
+        '&1': "\033[0;34m",
+        '&2': "\033[0;32m",
+        '&3': "\033[0;34m",
+        '&4': "\033[0;31m",
+        '&5': "\033[0;35m",
+        '&6': "\033[0;33m",
+        '&7': "\033[0;37m",
+        '&8': "\033[0;90m",
+        '&9': "\033[0;34m",
+        '&a': "\033[0;92m",
+        '&b': "\033[0;96m",
+        '&c': "\033[0;91m",
+        '&d': "\033[0;95m",
+        '&e': "\033[0;93m",
+        '&f': "\033[0;37m",
+        '&l': "",
+        '&o': '',
+        '&m': "",
+        '&n': "",
+        '&r': "\033[0;37m",
+        '&k': ""
+    }
+    for value in color_codes.items():
+        message = message.replace(value[0], value[1])
+    return message + "\033[00m"
