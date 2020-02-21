@@ -1,21 +1,21 @@
 """
 Minecraft Time Machine
-Tryb tekstowy
-Autor: Buty935 aka workonfire
+Console mode
+Author: Buty935 aka workonfire
 """
 
-__VERSION__ = '1.0.1 ALPHA'
+__VERSION__ = 'UNDER DEVELOPMENT'
 
-# TODO: Niestandardowe formaty
-# TODO: Losowy czas
-# TODO: Komentarze w tworzeniu domyślnego config.yml
+# TODO: Custom timestamp formats
+# TODO: Random target time support
+# TODO: Comments in default config.yml
 
-# Wczytanie wymaganych bibliotek
+# Importing required libraries
 from colors import color_print, colored_message
 from time import sleep, mktime
 import gzip, shutil, os, atexit, yaml, datetime, ciso8601, colorama
 
-# Usunięcie plików logów przy wyjściu z programu
+# Removing old log files on program exit
 def exit_handler():
     try:
         shutil.rmtree('temp')
@@ -24,20 +24,20 @@ def exit_handler():
 
 atexit.register(exit_handler)
 
-# Zdefiniowanie funckji do wyświetlania kolorowych wiadomości
+# Defining function for printing colored timestamps
 def print_with_timestamp(timestamp, message):
     print(colorama.Style.BRIGHT + colorama.Fore.CYAN + timestamp + " " + colorama.Fore.WHITE + message + colorama.Style.RESET_ALL)
 
-# Zdefiniowanie funkcji odpowiadającej za korekcję czasu
+# Defining function for time correction
 def take_closest(shot, target):
     return int(min(target, key = lambda x: abs(x - int(mktime(ciso8601.parse_datetime(shot).timetuple())))))
 
-# Wczytanie pliku konfiguracyjnego
+# Reading the configuration file
 try:
     with open('config.yml') as config_file:
         config = yaml.load(config_file, Loader = yaml.FullLoader)
 except FileNotFoundError:
-    # Ustalenie domyślnych wartości pliku konfiguracyjnego
+    # Setting the default values if file does not exist
     with open('config.yml', 'w') as config_file:
         yaml.dump({
             'show_timestamps': True,
@@ -45,36 +45,45 @@ except FileNotFoundError:
             'logs_path': 'default',
             'playback_speed': 1,
             'filter': 'default',
-            'spacing': False
+            'spacing': False,
+            'locale': 'en'
         }, config_file)
     with open('config.yml') as config_file:
         config = yaml.load(config_file, Loader = yaml.FullLoader)
 
-# Powitanie
-color_print('cyan', "Minecraft Time Machine")
-color_print('green', "Wersja " + __VERSION__)
-color_print('yellow', "Tryb tekstowy\n")
+# Reading the language file
+try:
+    with open('messages\\' + config['locale'] + '.yml') as language_file:
+        language = yaml.load(language_file, Loader = yaml.FullLoader)
+except FileNotFoundError:
+    color_print('red', "Error: locale file 'messages\\"+config['locale']+".yml' does not exist. Please check your configuration.")
+    raise SystemExit
 
-# Ostrzeżenie o prędkości odtwarzania czatu
+# Welcome
+color_print('cyan', "Minecraft Time Machine by Buty935")
+color_print('green', language['version'] + __VERSION__)
+color_print('yellow', language['text_mode'] + "\n")
+
+# Playback speed warning
 if config['playback_speed'] > 10:
-    color_print('red', "UWAGA! Prędkość odtwarzania czatu o wartości większej niż 10x może skutkować brakiem czytelności czatu, a wysokie wartości mogą skutkować crashem programu.")
+    color_print('red', language['playback_speed_warning'])
 elif config['playback_speed'] <= 0:
     config['playback_speed'] = 1
 
-# Ustalenie ścieżki pliku z logami
+# Getting the logs path
 if config['logs_path'] == 'default':
     config['logs_path'] = os.getenv("APPDATA") + '\.minecraft\logs\\'
 
-# Ustalenie daty
-color_print('magenta', "Obsługiwany format: YYYY-MM-DD [HH:mm:ss]")
+# Setting the date
+color_print('magenta', language['supported_formats'])
 while True:
     if config['selected_time'] != 'none':
         target_time_unparsed = str(config['selected_time'])
-        color_print('green', "Cel podróży: " + target_time_unparsed)
+        color_print('green', language['target_time_set'] + target_time_unparsed)
     else:
-        target_time_unparsed = input("Wprowadź datę, do której chcesz się przenieść: ")
+        target_time_unparsed = input(language['target_time_input'])
 
-    # Przetworzenie daty i godziny
+    # Processing the date and time
     try:
         target_time_parsed = {'date': target_time_unparsed.split(' ')[0],
                               'time': target_time_unparsed.split(' ')[1]}
@@ -87,15 +96,15 @@ while True:
         target_time_parsed = {'date': target_time_unparsed}
         break
     except FileNotFoundError:  # zadziała tylko na podanie daty i godziny, bo dżejuś tak powiedział #TODO: naprawić to
-        color_print('red', "Nie znaleziono żadnych wiadomości odnoszących się do daty " + target_time_parsed['date'] + ". Sprawdź ścieżkę logów w pliku konfiguracyjnym (config.yml).")
+        color_print('red', language['time_not_found1'] + target_time_parsed['date'] + language['time_not_found2'])
 
-# Ustalenie ilości plików z logami
+# Determining the number of log files
 logs_files = []
 for filename in os.listdir(config['logs_path']):
     if filename.endswith('.log.gz') and filename[:10] == target_time_parsed['date']:
         logs_files.append(filename)
 
-# Wypakowywanie plików z logami
+# Extracting the log files
 try:
     os.makedirs('temp')
 except FileExistsError:
@@ -110,7 +119,7 @@ for file in logs_files:
     os.remove('temp\\' + file.split('.')[0] + '.log')
 del logs_files
 
-# Wczytanie zawartości plików z logami do listy
+# Loading the log files contents into the list
 full_logs = []
 if config['filter'] == 'default':
     config['filter'] = "[CHAT]"
@@ -119,27 +128,27 @@ with open('temp\\used.log') as used_log_file:
         if config['filter'] in line:
             full_logs.append(line.rstrip())
 
-# Wczytanie znaczników czasów z logów do listy i przekonwertowanie ich na czas uniksowy (GMT+1)
+# Loading the timestamps from logs into the list and converting them to UNIX time
 times = []
 messages = []
 for line in full_logs:
     times.append(int(mktime(ciso8601.parse_datetime(target_time_parsed['date'] + ' ' + line.split(' ')[0].strip('[]')).timetuple())))
-    # Wczytanie wiadomości z logów do listy
+    # Inserting the messages into the list
     messages.append(' '.join(line.split(' ')[3:]))
 
-# Pobieranie wiadomości tylko z podanej godziny, jeśli została podana
+# Importing messages only from the given time, if provided
 try:
     messages = messages[times.index(take_closest(target_time_unparsed, times)) + 1:]
     times = times[times.index(take_closest(target_time_unparsed, times)) + 1:]
     if target_time_parsed['time']:
-        color_print('green', "Przeniesiono cię do najbliższej godziny")
+        color_print('green', language['moved_to_the_closest_time'])
 except KeyError:
     pass
 except ValueError:
-    color_print('red', "Wystąpił niespodziewany błąd. Sprawdź swój plik konfiguracyjny.")
+    color_print('red', language['filter_error'])
     raise SystemExit
 
-# Zamiania oryginalnych wartości z wiadomości na te z pliku konfiguracyjnego
+# Replacing the original values from the message with those from the configuration file
 edited_messages = []
 for message in messages:
     new_val = message
@@ -148,7 +157,7 @@ for message in messages:
     edited_messages.append(new_val)
 del new_val, messages
 
-# Wyświetlenie wiadomości
+# Displaying the messages
 iterator = 0
 for message in edited_messages:
     if config['spacing']:

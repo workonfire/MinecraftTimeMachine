@@ -8,6 +8,7 @@ show_timestamps: true
 playback_speed: 1
 filter: default
 spacing: false
+locale: pl
 
 # Konfiguracja wyglądu
 replace:
