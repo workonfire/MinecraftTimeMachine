@@ -23,6 +23,9 @@ If so, this app is for you! It simply reads the Minecraft chat logs files in rea
 - *TODO: Going back to random time*
 - *TODO: Screenshots and GUI support*
 
+### Downloads
+The latest release is always available [here](https://github.com/workonfire/MinecraftTimeMachine/releases "here").
+
 ### Supported languages
 - English
 - Polish
