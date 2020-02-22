@@ -4,8 +4,10 @@ Console mode
 Author: Buty935 aka workonfire
 """
 
-__VERSION__ = '1.0 BETA'
+__VERSION__ = '1.0.1 BETA'
 __AUTHOR__ = 'Buty935'
+__CLIENT_ID__ = 680766220764839966
+__AUTHOR_DISCORD__ = "workonfire#1828"
 
 # TODO: Custom timestamp formats
 # TODO: Random target time support
@@ -56,6 +58,12 @@ except FileNotFoundError:
     with open('config.yml') as config_file:
         config = yaml.load(config_file, Loader = yaml.FullLoader)
 
+# Setting Discord Rich Presence environment
+if config['discord_rich_presence']:
+    from pypresence import Presence
+    RPC = Presence(__CLIENT_ID__)
+    RPC.connect()
+
 # Reading the language file
 try:
     with open('messages\\' + config['locale'] + '.yml') as language_file:
@@ -74,6 +82,15 @@ except FileNotFoundError:
 print(color_text('purple', 'back', "Minecraft Time Machine by " + __AUTHOR__))
 print(color_text('green', 'bright', language['version'] + __VERSION__))
 print(color_text('yellow', 'bright', language['text_mode'] + "\n"))
+
+# Showing Discord Rich Presence status
+if config['discord_rich_presence']:
+    RPC.update(large_image = 'avatar',
+               large_text = language['discord_author'] + __AUTHOR_DISCORD__,
+               small_image = 'clock',
+               small_text = "MCTimeMachine",
+               details = language['discord_choosing_date']
+               )
 
 # Showing the playback speed warning
 if config['playback_speed'] > 10:
@@ -180,6 +197,16 @@ try:
 except NameError:
     print(color_text('red', 'none', language['time_range_exceeded']))
     raise SystemExit
+
+# Updating Discord Rich Presence status
+if config['discord_rich_presence']:
+    RPC.update(large_image = 'clock',
+               large_text = "MCTimeMachine",
+               small_image = 'avatar',
+               small_text = language['discord_author'] + __AUTHOR_DISCORD__,
+               details = language['discord_activity'],
+               state = language['discord_target'] + target_time_parsed['date']
+               )
 
 # Displaying the messages
 iterator = 0

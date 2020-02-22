@@ -1,5 +1,7 @@
 # MinecraftTimeMachine
 
+[![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=flat&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
+
 Have you ever wanted to... go back in time within Minecraft?
 
 If so, this app is for you! It simply reads the Minecraft chat logs files in real-time, to make the experience of going back in time more realistic.
