@@ -79,6 +79,16 @@ except FileNotFoundError:
         raise SystemExit
 
 # Welcome
+if config['splash']:
+    print("\n")
+    print(color_text('purple', 'none', "████████╗██╗███╗   ███╗███████╗    ███╗   ███╗ █████╗  ██████╗██╗  ██╗██╗███╗   ██╗███████╗"))
+    print(color_text('purple', 'bright', "╚══██╔══╝██║████╗ ████║██╔════╝    ████╗ ████║██╔══██╗██╔════╝██║  ██║██║████╗  ██║██╔════╝"))
+    print(color_text('purple', 'none', "   ██║   ██║██╔████╔██║█████╗      ██╔████╔██║███████║██║     ███████║██║██╔██╗ ██║█████╗"))
+    print(color_text('purple', 'bright', "   ██║   ██║██║╚██╔╝██║██╔══╝      ██║╚██╔╝██║██╔══██║██║     ██╔══██║██║██║╚██╗██║██╔══╝"))
+    print(color_text('purple', 'none', "   ██║   ██║██║ ╚═╝ ██║███████╗    ██║ ╚═╝ ██║██║  ██║╚██████╗██║  ██║██║██║ ╚████║███████╗"))
+    print(color_text('purple', 'bright', "   ╚═╝   ╚═╝╚═╝     ╚═╝╚══════╝    ╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝"))
+    print("\n")
+
 print(color_text('purple', 'back', "Minecraft Time Machine by " + __AUTHOR__))
 print(color_text('green', 'bright', language['version'] + __VERSION__))
 print(color_text('yellow', 'bright', language['text_mode'] + "\n"))
@@ -103,14 +113,14 @@ if config['logs_path'] == 'default':
     config['logs_path'] = os.getenv("APPDATA") + '\.minecraft\logs\\'
 
 # Setting the date
-print(color_text('purple', 'bright', language['supported_formats']))
+print(language['supported_formats'])
 while True:
     if config['selected_time'] != 'none':
         target_time_unparsed = str(config['selected_time'])
         print(color_text('green', 'none', language['target_time_set'] + target_time_unparsed))
     else:
         try:
-            target_time_unparsed = input(language['target_time_input'])
+            target_time_unparsed = input(color_text('purple', 'bright', language['target_time_input']))
         except KeyboardInterrupt:
             print(color_text('red', 'none', language['program_exit']))
             raise SystemExit

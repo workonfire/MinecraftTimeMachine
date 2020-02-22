@@ -8,6 +8,7 @@ filter: default
 spacing: false
 locale: pl
 discord_rich_presence: true
+splash: true
 
 replace:
   'Buty935': "&c&lB&6&lu&e&lt&a&ly&b&l9&3&l3&9&l5&f"
@@ -40,3 +41,6 @@ replace:
   '[RAK]': "&c[RAK]&f"
   'Teleportuje do end.': "Teleportuje do &cend&f."
   'Vanish dla': "&6Vanish dla&f"
+  '?Oni?': "&7*&fOni&7*&f"
+  '?Nurarihyon?': "*&4Nurarihyon&f*"
+  '[Ja ->': "&6[&cJa &6->&f"

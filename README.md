@@ -47,6 +47,8 @@ The latest release is always available [here](https://github.com/workonfire/Mine
     filter: default
     spacing: false
     locale: en
+    discord_rich_presence: true
+    splash: true
     
     replace:
       'Buty935': "&c&lB&6&lu&e&lt&a&ly&b&l9&3&l3&9&l5&f"
