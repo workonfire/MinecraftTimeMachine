@@ -31,6 +31,7 @@ If so, this app is for you! It simply reads the Minecraft chat logs files in rea
 - [Python 3](https://www.python.org/downloads/ "Python 3")
 - [PyYAML](https://pyyaml.org/wiki/PyYAMLDocumentation "PyYAML")
 - [ciso8601](https://pypi.org/project/ciso8601/ "ciso8601")
+- [pypresence](https://pypi.org/project/pypresence/ "pypresence") (optional)
 
 ### Screenshots
 [![Screenshot](https://i.imgur.com/tmTHKFZ.png "Screenshot")](https://i.imgur.com/tmTHKFZ.png "Screenshot")
