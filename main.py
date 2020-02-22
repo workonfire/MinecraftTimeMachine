@@ -4,7 +4,7 @@ Console mode
 Author: Buty935 aka workonfire
 """
 
-__VERSION__ = 'UNDER DEVELOPMENT'
+__VERSION__ = '1.0 BETA'
 __AUTHOR__ = 'Buty935'
 
 # TODO: Custom timestamp formats
@@ -16,7 +16,7 @@ from colors import color_text, colored_message
 from time import sleep, mktime
 import gzip, shutil, os, atexit, yaml, datetime, ciso8601, sys
 
-# Removing old log files and safe closing program exit
+# Removing old log files and safe closing the program on exit
 def exit_handler():
     try:
         shutil.rmtree('temp')
@@ -29,11 +29,11 @@ def exit_handler():
 
 atexit.register(exit_handler)
 
-# Defining function for printing colored timestamps
+# Defining the function for printing colored timestamps
 def print_with_timestamp(timestamp, message_input):
     print("\033[0;96m" + timestamp + " " + "\033[0;37m" + message_input + "\033[00m")
 
-# Defining function for time correction
+# Defining the function for time correction
 def take_closest(shot, target):
     return int(min(target, key = lambda x: abs(x - int(mktime(ciso8601.parse_datetime(shot).timetuple())))))
 
@@ -75,7 +75,7 @@ print(color_text('purple', 'back', "Minecraft Time Machine by " + __AUTHOR__))
 print(color_text('green', 'bright', language['version'] + __VERSION__))
 print(color_text('yellow', 'bright', language['text_mode'] + "\n"))
 
-# Playback speed warning
+# Showing the playback speed warning
 if config['playback_speed'] > 10:
     print(color_text('red', 'none', language['playback_speed_warning']))
 elif config['playback_speed'] <= 0:
