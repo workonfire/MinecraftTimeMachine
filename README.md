@@ -9,7 +9,7 @@ If so, this app is for you! It simply reads the Minecraft chat logs files in rea
 
 ------------
 
-
+*NOTE:* If you're having issues with starting the program, disable Discord Rich Presence in `config.yml`.
 
 ### Features
 - Going back in time to an exact timestamp
