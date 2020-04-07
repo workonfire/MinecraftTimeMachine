@@ -40,17 +40,19 @@ The latest release is always available [here](https://github.com/workonfire/Mine
 [![Screenshot](https://i.imgur.com/tmTHKFZ.png "Screenshot")](https://i.imgur.com/tmTHKFZ.png "Screenshot")
 
 ### Example configuration file
-    selected_time: none
-    logs_path: default
-    show_timestamps: true
-    playback_speed: 1
-    filter: default
-    spacing: false
-    locale: en
-    discord_rich_presence: true
-    splash: true
+```yaml
+selected_time: none
+logs_path: default
+show_timestamps: true
+playback_speed: 1
+filter: default
+spacing: false
+locale: en
+discord_rich_presence: true
+splash: true
     
-    replace:
-      'Buty935': "&c&lB&6&lu&e&lt&a&ly&b&l9&3&l3&9&l5&f"
-      'admin': '&4admin&f'
-      '*VIP*': '&6*&eVIP&6*&f'
+replace:
+  'Buty935': "&c&lB&6&lu&e&lt&a&ly&b&l9&3&l3&9&l5&f"
+  'admin': '&4admin&f'
+  '*VIP*': '&6*&eVIP&6*&f'
+```
