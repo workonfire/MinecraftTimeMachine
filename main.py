@@ -7,11 +7,7 @@ Author: Buty935 aka workonfire
 __VERSION__ = '1.0.1 BETA'
 __AUTHOR__ = 'Buty935'
 __CLIENT_ID__ = 680766220764839966
-__AUTHOR_DISCORD__ = "workonfire#1828"
-
-# TODO: Custom timestamp formats
-# TODO: Random target time support
-# TODO: Comments in default config.yml
+__AUTHORS_DISCORD__ = "workonfire#1828"
 
 # Importing required libraries
 from colors import color_text, colored_message
@@ -96,7 +92,7 @@ print(color_text('yellow', 'bright', language['text_mode'] + "\n"))
 # Showing Discord Rich Presence status
 if config['discord_rich_presence']:
     RPC.update(large_image = 'avatar',
-               large_text = language['discord_author'] + __AUTHOR_DISCORD__,
+               large_text = language['discord_author'] + __AUTHORS_DISCORD__,
                small_image = 'clock',
                small_text = "MCTimeMachine",
                details = language['discord_choosing_date']
@@ -213,7 +209,7 @@ if config['discord_rich_presence']:
     RPC.update(large_image = 'clock',
                large_text = "MCTimeMachine",
                small_image = 'avatar',
-               small_text = language['discord_author'] + __AUTHOR_DISCORD__,
+               small_text = language['discord_author'] + __AUTHORS_DISCORD__,
                details = language['discord_activity'],
                state = language['discord_target'] + target_time_parsed['date']
                )
