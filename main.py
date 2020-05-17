@@ -54,12 +54,6 @@ except FileNotFoundError:
     with open('config.yml') as config_file:
         config = yaml.load(config_file, Loader = yaml.FullLoader)
 
-# Setting Discord Rich Presence environment
-if config['discord_rich_presence']:
-    from pypresence import Presence
-    RPC = Presence(__CLIENT_ID__)
-    RPC.connect()
-
 # Reading the language file
 try:
     with open('messages\\' + config['locale'] + '.yml') as language_file:
@@ -88,6 +82,18 @@ if config['splash']:
 print(color_text('purple', 'back', "Minecraft Time Machine by " + __AUTHOR__))
 print(color_text('green', 'bright', language['version'] + __VERSION__))
 print(color_text('yellow', 'bright', language['text_mode'] + "\n"))
+
+
+# Setting Discord Rich Presence environment
+if config['discord_rich_presence']:
+    from pypresence import Presence
+    try:
+        RPC = Presence(__CLIENT_ID__)
+        RPC.connect()
+    except:
+        print(color_text('red', 'none', language['discord_rich_presence_error']))
+        config['discord_rich_presence'] = False
+
 
 # Showing Discord Rich Presence status
 if config['discord_rich_presence']:
@@ -225,7 +231,8 @@ for message in edited_messages:
         else:
             print(colored_message(message))
         try:
-            sleep(int(times[iterator + 1] - times[iterator]) / config['playback_speed'])
+            interval = int(times[iterator + 1] - times[iterator]) / config['playback_speed']
+            sleep(interval)
         except IndexError:
             pass
     except KeyboardInterrupt:
