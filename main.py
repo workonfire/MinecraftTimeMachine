@@ -7,7 +7,7 @@ Author: Buty935 aka workonfire
 __VERSION__ = '1.0.1 BETA'
 __AUTHOR__ = 'Buty935'
 __CLIENT_ID__ = 680766220764839966
-__AUTHORS_DISCORD__ = "workonfire#1828"
+__AUTHORS_DISCORD__ = "workonfire#8262"
 
 # Importing required libraries
 from colors import color_text, colored_message
