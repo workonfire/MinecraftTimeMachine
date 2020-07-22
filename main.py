@@ -10,9 +10,19 @@ __CLIENT_ID__ = 680766220764839966
 __AUTHORS_DISCORD__ = "workonfire#8262"
 
 # Importing required libraries
-from colors import color_text, colored_message
+
+import atexit
+import ciso8601
+import datetime
+import gzip
+import os
+import shutil
+import sys
+import yaml
 from time import sleep, mktime
-import gzip, shutil, os, atexit, yaml, datetime, ciso8601, sys
+
+from colors import color_text, colored_message
+
 
 # Removing old log files and safe closing the program on exit
 def exit_handler():
@@ -25,20 +35,24 @@ def exit_handler():
     except IndexError:
         pass
 
+
 atexit.register(exit_handler)
+
 
 # Defining the function for printing colored timestamps
 def print_with_timestamp(timestamp, message_input):
     print("\033[0;96m" + timestamp + " " + "\033[0;37m" + message_input + "\033[00m")
 
+
 # Defining the function for time correction
 def take_closest(shot, target):
-    return int(min(target, key = lambda x: abs(x - int(mktime(ciso8601.parse_datetime(shot).timetuple())))))
+    return int(min(target, key=lambda x: abs(x - int(mktime(ciso8601.parse_datetime(shot).timetuple())))))
+
 
 # Reading the configuration file
 try:
     with open('config.yml') as config_file:
-        config = yaml.load(config_file, Loader = yaml.FullLoader)
+        config = yaml.load(config_file, Loader=yaml.FullLoader)
 except FileNotFoundError:
     # Setting the default values if file does not exist
     with open('config.yml', 'w') as config_file:
@@ -52,18 +66,19 @@ except FileNotFoundError:
             'locale': 'en'
         }, config_file)
     with open('config.yml') as config_file:
-        config = yaml.load(config_file, Loader = yaml.FullLoader)
+        config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 # Reading the language file
 try:
     with open('messages\\' + config['locale'] + '.yml') as language_file:
-        language = yaml.load(language_file, Loader = yaml.FullLoader)
+        language = yaml.load(language_file, Loader=yaml.FullLoader)
 except FileNotFoundError:
-    print(color_text('red', 'none', "Error: locale file 'messages\\"+config['locale']+".yml' does not exist. Please check your configuration."))
+    print(color_text('red', 'none', "Error: locale file 'messages\\" + config[
+        'locale'] + ".yml' does not exist. Please check your configuration."))
     print("Setting default language...")
     try:
         with open('messages\\en.yml') as language_file:
-            language = yaml.load(language_file, Loader = yaml.FullLoader)
+            language = yaml.load(language_file, Loader=yaml.FullLoader)
     except FileNotFoundError:
         print(color_text('red', 'none', "DEFAULT LOCALE FILE (en.yml) NOT FOUND."))
         raise SystemExit
@@ -71,38 +86,40 @@ except FileNotFoundError:
 # Welcome
 if config['splash']:
     print("\n")
-    print(color_text('purple', 'none', "████████╗██╗███╗   ███╗███████╗    ███╗   ███╗ █████╗  ██████╗██╗  ██╗██╗███╗   ██╗███████╗"))
-    print(color_text('purple', 'bright', "╚══██╔══╝██║████╗ ████║██╔════╝    ████╗ ████║██╔══██╗██╔════╝██║  ██║██║████╗  ██║██╔════╝"))
-    print(color_text('purple', 'none', "   ██║   ██║██╔████╔██║█████╗      ██╔████╔██║███████║██║     ███████║██║██╔██╗ ██║█████╗"))
-    print(color_text('purple', 'bright', "   ██║   ██║██║╚██╔╝██║██╔══╝      ██║╚██╔╝██║██╔══██║██║     ██╔══██║██║██║╚██╗██║██╔══╝"))
-    print(color_text('purple', 'none', "   ██║   ██║██║ ╚═╝ ██║███████╗    ██║ ╚═╝ ██║██║  ██║╚██████╗██║  ██║██║██║ ╚████║███████╗"))
-    print(color_text('purple', 'bright', "   ╚═╝   ╚═╝╚═╝     ╚═╝╚══════╝    ╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝"))
+    print(color_text('purple', 'none',
+                     "████████╗██╗███╗   ███╗███████╗    ███╗   ███╗ █████╗  ██████╗██╗  ██╗██╗███╗   ██╗███████╗"))
+    print(color_text('purple', 'bright',
+                     "╚══██╔══╝██║████╗ ████║██╔════╝    ████╗ ████║██╔══██╗██╔════╝██║  ██║██║████╗  ██║██╔════╝"))
+    print(color_text('purple', 'none',
+                     "   ██║   ██║██╔████╔██║█████╗      ██╔████╔██║███████║██║     ███████║██║██╔██╗ ██║█████╗"))
+    print(color_text('purple', 'bright',
+                     "   ██║   ██║██║╚██╔╝██║██╔══╝      ██║╚██╔╝██║██╔══██║██║     ██╔══██║██║██║╚██╗██║██╔══╝"))
+    print(color_text('purple', 'none',
+                     "   ██║   ██║██║ ╚═╝ ██║███████╗    ██║ ╚═╝ ██║██║  ██║╚██████╗██║  ██║██║██║ ╚████║███████╗"))
+    print(color_text('purple', 'bright',
+                     "   ╚═╝   ╚═╝╚═╝     ╚═╝╚══════╝    ╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝"))
     print("\n")
 
 print(color_text('purple', 'back', "Minecraft Time Machine by " + __AUTHOR__))
 print(color_text('green', 'bright', language['version'] + __VERSION__))
 print(color_text('yellow', 'bright', language['text_mode'] + "\n"))
 
-
 # Setting Discord Rich Presence environment
 if config['discord_rich_presence']:
     from pypresence import Presence
+
     try:
         RPC = Presence(__CLIENT_ID__)
         RPC.connect()
-    except:
+        RPC.update(large_image='avatar',
+                   large_text=language['discord_author'] + __AUTHORS_DISCORD__,
+                   small_image='clock',
+                   small_text="MCTimeMachine",
+                   details=language['discord_choosing_date']
+                   )
+    except:  # I know, it's ugly.
         print(color_text('red', 'none', language['discord_rich_presence_error']))
         config['discord_rich_presence'] = False
-
-
-# Showing Discord Rich Presence status
-if config['discord_rich_presence']:
-    RPC.update(large_image = 'avatar',
-               large_text = language['discord_author'] + __AUTHORS_DISCORD__,
-               small_image = 'clock',
-               small_text = "MCTimeMachine",
-               details = language['discord_choosing_date']
-               )
 
 # Showing the playback speed warning
 if config['playback_speed'] > 10:
@@ -112,7 +129,7 @@ elif config['playback_speed'] <= 0:
 
 # Getting the logs path
 if config['logs_path'] == 'default':
-    config['logs_path'] = os.getenv("APPDATA") + '\.minecraft\logs\\'
+    config['logs_path'] = os.getenv("APPDATA") + '\\.minecraft\\logs\\'
 
 # Setting the date
 print(language['supported_formats'])
@@ -142,7 +159,8 @@ while True:
     except KeyError:
         break
     except FileNotFoundError:
-        print(color_text('red', 'none', language['time_not_found1'] + target_time_parsed['date'] + language['time_not_found2']))
+        print(color_text('red', 'none',
+                         language['time_not_found1'] + target_time_parsed['date'] + language['time_not_found2']))
 
 # Determining the number of log files
 logs_files = []
@@ -178,7 +196,8 @@ with open('temp\\used.log') as used_log_file:
 times = []
 messages = []
 for line in full_logs:
-    times.append(int(mktime(ciso8601.parse_datetime(target_time_parsed['date'] + ' ' + line.split(' ')[0].strip('[]')).timetuple())))
+    times.append(int(
+        mktime(ciso8601.parse_datetime(target_time_parsed['date'] + ' ' + line.split(' ')[0].strip('[]')).timetuple())))
     # Inserting the messages into the list
     if "[Client thread/INFO]" in line:
         messages.append(' '.join(line.split(' ')[4:]))
@@ -212,12 +231,12 @@ except NameError:
 
 # Updating Discord Rich Presence status
 if config['discord_rich_presence']:
-    RPC.update(large_image = 'clock',
-               large_text = "MCTimeMachine",
-               small_image = 'avatar',
-               small_text = language['discord_author'] + __AUTHORS_DISCORD__,
-               details = language['discord_activity'],
-               state = language['discord_target'] + target_time_parsed['date']
+    RPC.update(large_image='clock',
+               large_text="MCTimeMachine",
+               small_image='avatar',
+               small_text=language['discord_author'] + __AUTHORS_DISCORD__,
+               details=language['discord_activity'],
+               state=language['discord_target'] + target_time_parsed['date']
                )
 
 # Displaying the messages
@@ -227,7 +246,9 @@ for message in edited_messages:
         message += "\n"
     try:
         if config['show_timestamps']:
-            print_with_timestamp("[" + datetime.datetime.fromtimestamp(int(times[iterator])).strftime('%Y-%m-%d %H:%M:%S') + "]", colored_message(message))
+            print_with_timestamp(
+                "[" + datetime.datetime.fromtimestamp(int(times[iterator])).strftime('%Y-%m-%d %H:%M:%S') + "]",
+                colored_message(message))
         else:
             print(colored_message(message))
         try:
